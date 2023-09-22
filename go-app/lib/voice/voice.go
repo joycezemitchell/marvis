@@ -15,7 +15,6 @@ type Voice interface{
     WaitForCommand() (*Message, error) 
 }
 
-
 type voice struct{
     config *viper.Viper
 }
@@ -30,10 +29,6 @@ func NewVoice(ctx context.Context, config *viper.Viper) Voice {
     return &voice{
         config: config,
     }
-}
-
-func init() {
-
 }
 
 func (v *voice) WaitForCommand() (*Message, error) {
