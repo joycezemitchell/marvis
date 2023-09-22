@@ -8,17 +8,14 @@ import (
     "marvis/lib/gpt"
 )
 
-
 type Assistant interface {
     Start()
 }
-
 
 type assist struct{
     voice voice.Voice
     gpt gpt.GPT
 }
-
 
 func NewAssistant(ctx context.Context, v voice.Voice, g gpt.GPT) Assistant {
     return &assist{
@@ -26,7 +23,6 @@ func NewAssistant(ctx context.Context, v voice.Voice, g gpt.GPT) Assistant {
         gpt: g,
     }
 }
-
 
 func (a *assist) Start() {
     log.Println("Starting assistant app...")
