@@ -26,13 +26,11 @@ type Message struct {
     Ok bool   
 }
 
-
 func NewVoice(ctx context.Context, config *viper.Viper) Voice {
     return &voice{
         config: config,
     }
 }
-
 
 func init() {
 
