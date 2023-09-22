@@ -4,6 +4,7 @@ import (
     "context"
     "log"
     "marvis/lib/voice"
+    "marvis/utils/command"
     "marvis/lib/gpt"
 )
 
@@ -28,8 +29,7 @@ func NewAssistant(ctx context.Context, v voice.Voice, g gpt.GPT) Assistant {
 
 
 func (a *assist) Start() {
-    log.Println("Starting assistant app...")   
-
+    log.Println("Starting assistant app...")
 
     // Run forever until it stop
     for {
@@ -44,6 +44,13 @@ func (a *assist) Start() {
             log.Println(err)
         }
 
+
+        // Exit application
+        if vc.Command == command.Exit() {
+            log.Println("exit")
+            break;
+        }     
+
         // Run the assistant if command has the trigger word
         if vc.Ok {
             gptMessage := &gpt.Message{
@@ -54,14 +61,16 @@ func (a *assist) Start() {
             switch(vc.Command) {
                 // If playlist, call gpt that creates playlist
                 // Call spotify and play tracks
-                case "playlist":
+                case command.Playlist():
+                    log.Println("Create a plalist")
                     a.gpt.CreatePlaylist(gptMessage)
         
                 // If anything else call gpt for general purpose inquiry 
                 default:
+                    log.Println("default command")
                     a.gpt.Ask(gptMessage)
             }
-        }
+        } 
     }
 }
 

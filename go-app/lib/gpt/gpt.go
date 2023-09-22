@@ -2,6 +2,7 @@ package gpt
 
 import (
     "context"
+    "github.com/spf13/viper"
 )
 
 type GPT interface{
@@ -10,14 +11,18 @@ type GPT interface{
 }
 
 
-type gpt struct{}
+type gpt struct{
+    config *viper.Viper
+}
 
 type Message struct {
     Request string
 }
     
-func NewGPT(ctx context.Context) GPT {
-    return &gpt{}
+func NewGPT(ctx context.Context, config *viper.Viper) GPT {
+    return &gpt{
+        config: config,
+    }
 }
 
 

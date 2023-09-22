@@ -11,7 +11,7 @@ import(
 
 
 const (
-   path = "../config"
+   path = "config"
    fileName = "config"
 )
 
@@ -19,11 +19,11 @@ func main(){
     ctx := context.Background()
     
     // Load configuration    
-    cfg, err := config.Load(ctx, fileName, path)
+    configObj := config.NewConfig(ctx, fileName, path)
+    cfg, err := configObj.Load()
     if err != nil {
         log.Println("Error loading configuration file ", err)
     }
-
 
     // Start voice assistant 
     gptObj :=  gpt.NewGPT(ctx, cfg)

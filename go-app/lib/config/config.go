@@ -26,7 +26,7 @@ func NewConfig(ctx context.Context, filename, path string) Config {
 func (c *config) Load() (*viper.Viper, error){ 
     // Initialize Viper
 	v := viper.New()
-	v.SetConfigName(c.filaname)
+	v.SetConfigName(c.filename)
 	v.AddConfigPath(c.path)
 	v.SetConfigType("yaml")
 
