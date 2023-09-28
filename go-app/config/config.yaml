@@ -3,3 +3,5 @@ voice:
   triggerword: "hello"  
   exitword: "exit now exit"  
   playlistword: "create playlist"  
+gpt:
+  key: "xxx"     

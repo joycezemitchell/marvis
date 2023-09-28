@@ -2,6 +2,8 @@ package common
 
 import(
     "strings"
+    "crypto/rand"
+    "encoding/hex"
 )
 
 func CheckWordsExist(target string, msg string) bool {
@@ -24,4 +26,13 @@ func CheckWordsExist(target string, msg string) bool {
 	}
 
 	return true
+}
+
+
+func GenerateRandomString(length int) string {
+	bytes := make([]byte, length)
+	if _, err := rand.Read(bytes); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(bytes)
 }

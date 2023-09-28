@@ -29,6 +29,7 @@ func (c *config) Load() (*viper.Viper, error){
 	v.SetConfigName(c.filename)
 	v.AddConfigPath(c.path)
 	v.SetConfigType("yaml")
+    v.AutomaticEnv()
 
 	if err := v.ReadInConfig(); err != nil {
 		// log.Fatalf("Error reading config file: %s", err)

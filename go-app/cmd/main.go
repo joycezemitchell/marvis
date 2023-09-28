@@ -4,6 +4,7 @@ import(
     "marvis/app/assistant"
     "marvis/lib/voice"
     "marvis/lib/gpt"
+    "marvis/lib/spotify"
     "marvis/lib/config"
     "context"
     "log"
@@ -28,7 +29,8 @@ func main(){
     // Start voice assistant 
     gptObj :=  gpt.NewGPT(ctx, cfg)
     voiceObj := voice.NewVoice(ctx, cfg) 
-    a := assistant.NewAssistant(ctx, voiceObj, gptObj)
+    spotifyObj := spotify.NewSpotify(ctx, cfg)
+    a := assistant.NewAssistant(ctx, voiceObj, gptObj, spotifyObj)
     a.Start()
 
     // Start localhost server

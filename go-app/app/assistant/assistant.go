@@ -6,6 +6,8 @@ import (
     "marvis/lib/voice"
     "marvis/utils/command"
     "marvis/lib/gpt"
+    "marvis/lib/spotify"
+    "encoding/json"
 )
 
 type Assistant interface {
@@ -15,12 +17,14 @@ type Assistant interface {
 type assist struct{
     voice voice.Voice
     gpt gpt.GPT
+    spotify spotify.Spotify
 }
 
-func NewAssistant(ctx context.Context, v voice.Voice, g gpt.GPT) Assistant {
+func NewAssistant(ctx context.Context, v voice.Voice, g gpt.GPT, s spotify.Spotify) Assistant {
     return &assist{
         voice: v,
         gpt: g,
+        spotify: s,
     }
 }
 
@@ -34,7 +38,9 @@ func (a *assist) Start() {
         // Save command into a file
         // Read the file
         // Process file and extract the command
-        vc, err := a.voice.WaitForCommand()
+        // vc, err := a.voice.WaitForCommand()
+        vc, err := a.voice.WaitForCommandShell()
+
         if  err != nil {
             // Log error
             log.Println(err)
@@ -50,7 +56,7 @@ func (a *assist) Start() {
         // Run the assistant if command has the trigger word
         if vc.Ok {
             gptMessage := &gpt.Message{
-                Request : vc.Command,
+                Request : vc.Request,
             }
 
             // Check what kind of command has given
@@ -59,8 +65,7 @@ func (a *assist) Start() {
                 // Call spotify and play tracks
                 case command.Playlist():
                     log.Println("Create a plalist")
-                    a.gpt.CreatePlaylist(gptMessage)
-        
+                    a.CreatePlaylist(gptMessage)  
                 // If anything else call gpt for general purpose inquiry 
                 default:
                     log.Println("default command")
@@ -70,7 +75,24 @@ func (a *assist) Start() {
     }
 }
 
+func (a *assist) CreatePlaylist(gptMessage *gpt.Message) {
+    var playlist spotify.Playlist
 
+    // Ask gpt to create the playlist
+    plBytes := a.gpt.CreatePlaylist(gptMessage)
+
+    // Convert the result to spotify playlist model
+    err := json.Unmarshal(plBytes, &playlist)
+    if err != nil {
+        log.Println(err)
+    }
+    log.Printf("%+v\n", playlist)
+
+    // Call spotify to create the playlist
+    a.spotify.CreatePlaylist(&playlist)
+
+    // Play the tracks, maybe
+}
 
 
 

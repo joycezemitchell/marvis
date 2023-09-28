@@ -2,7 +2,10 @@ module marvis
 
 go 1.21.0
 
-require github.com/spf13/viper v1.16.0
+require (
+	github.com/sashabaranov/go-openai v1.15.3
+	github.com/spf13/viper v1.16.0
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
