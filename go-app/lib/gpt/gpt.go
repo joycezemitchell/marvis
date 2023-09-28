@@ -27,9 +27,10 @@ func NewGPT(ctx context.Context, config *viper.Viper) GPT {
 }
 
 func (g *gpt) CreatePlaylist(msg *Message) []byte { 
+    log.Println("GPT: creating the playlist")
     resp := g.GPTRequest(msg.Request, "Create a playlist in the following json format {playlist:[{'title':'xxx', artist:'xxx'}]. Just return the json and not anything else") 
     reply := resp.Choices[0].Message.Content
-    log.Println(reply)
+    log.Println("GPT: Playlist has now been generated. Waiting for Spotify...")
     return []byte(reply)
 }
  
@@ -40,7 +41,7 @@ func (g *gpt) Ask(msg *Message) {
 func (g *gpt) GPTRequest(msg, system string) *openai.ChatCompletionResponse {
     g.config.SetEnvPrefix("gpt")
     key :=  g.config.GetString("key")
-    log.Println(key)
+    // log.Println(key)
 
     client := openai.NewClient(key)
     resp, err := client.CreateChatCompletion(

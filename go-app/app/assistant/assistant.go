@@ -64,7 +64,7 @@ func (a *assist) Start() {
                 // If playlist, call gpt that creates playlist
                 // Call spotify and play tracks
                 case command.Playlist():
-                    log.Println("Create a plalist")
+                    log.Println("Create a playlist")
                     a.CreatePlaylist(gptMessage)  
                 // If anything else call gpt for general purpose inquiry 
                 default:
@@ -86,7 +86,7 @@ func (a *assist) CreatePlaylist(gptMessage *gpt.Message) {
     if err != nil {
         log.Println(err)
     }
-    log.Printf("%+v\n", playlist)
+    // log.Printf("%+v\n", playlist)
 
     // Call spotify to create the playlist
     a.spotify.CreatePlaylist(&playlist)
