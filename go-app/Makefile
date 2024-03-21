@@ -25,3 +25,4 @@ build-arm:
 	@echo "Building Marvis for Raspberry Pi..."
 	$(MAKE) build GOOS=linux GOARCH=arm GOARM=6
 	@echo "Build complete for Raspberry Pi"		
+
