@@ -14,7 +14,8 @@ type GPT interface {
 }
 
 type gpt struct {
-	config *viper.Viper
+	config   *viper.Viper
+	messages []openai.ChatCompletionMessage // Add a slice to store conversation messages
 }
 
 type Message struct {
@@ -23,7 +24,8 @@ type Message struct {
 
 func NewGPT(ctx context.Context, config *viper.Viper) GPT {
 	return &gpt{
-		config: config,
+		config:   config,
+		messages: make([]openai.ChatCompletionMessage, 0), // Initialize the slice
 	}
 }
 
@@ -39,36 +41,46 @@ func (g *gpt) Ask(msg *Message) {
 	resp := g.GPTRequest(msg.Request, "")
 	reply := resp.Choices[0].Message.Content
 
+	cfg := g.config
+	speechfile := cfg.GetString("ask.speechfile")
+	log.Println(speechfile)
+
 	// Save gpt reply to a text file
-	common.SaveToTextFile(reply)
+	common.SaveToTextFile(reply, speechfile)
 	log.Println(reply)
 }
 
 func (g *gpt) GPTRequest(msg, system string) *openai.ChatCompletionResponse {
 	g.config.SetEnvPrefix("gpt")
 	key := g.config.GetString("key")
-	log.Println(key)
 
 	client := openai.NewClient(key)
+
+	g.messages = append(g.messages, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleUser,
+		Content: msg,
+	})
+
+	if system != "" {
+		g.messages = append(g.messages, openai.ChatCompletionMessage{
+			Role:    openai.ChatMessageRoleSystem,
+			Content: system,
+		})
+	}
+
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: openai.GPT4,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleSystem,
-					Content: system,
-				},
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: msg,
-				},
-			},
+			Model:    openai.GPT4,
+			Messages: g.messages,
 		},
 	)
 	if err != nil {
 		log.Println(err)
+		return nil
 	}
+
+	g.messages = append(g.messages, resp.Choices[0].Message)
 
 	return &resp
 }

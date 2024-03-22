@@ -14,6 +14,7 @@ build:
 build-windows:
 	@echo "Building Marvis for Windows..."
 	$(MAKE) build GOOS=windows GOARCH=amd64 OUTFILE=marvis.exe
+	cd assets/windows && cp -r . ../../build/assets/
 	@echo "Build complete for Windows"
 
 build-debian:

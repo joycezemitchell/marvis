@@ -1,7 +1,9 @@
 voice:
-  speechfile: "assets/speech-to-text.txt"
+  speechfile: "speech-to-text.txt"
   triggerword: "hello"  
   exitword: "exit now exit"  
   playlistword: "create playlist"  
+ask:
+  speechfile: "assets/text-to-speech.txt"
 gpt:
   key: "xxx"     

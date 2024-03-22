@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-func SaveToTextFile(message string) error {
-	file, err := os.Create("assets/text-to-speech.txt")
+func SaveToTextFile(message, filename string) error {
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 		log.Fatalf("Failed to create or open file: %s", err)

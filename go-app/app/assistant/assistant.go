@@ -89,6 +89,9 @@ func (a *assist) Start() {
 			default:
 				log.Println("default command")
 				a.gpt.Ask(gptMessage)
+
+				// Make it talk
+				a.voice.Talk()
 				break
 			}
 		}

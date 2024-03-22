@@ -122,7 +122,7 @@ func (s *spotify) Search(artist, song string) string {
 func (s *spotify) PlayTracks(playTracks PlayTracks) error {
 	log.Println("Playing tracks")
 
-	reqURL := "https://api.spotify.com/v1/me/player/play"
+	reqURL := "https://api.spotify.com/v1/me/player/play?device_id=928c0746e8539bbc48ce127e1486bb2a81c505c7"
 
 	payload, err := json.Marshal(playTracks)
 	if err != nil {
